@@ -37,15 +37,19 @@ export function pixelsToText(pixels, width, height, style) {
     }
   } else {
     const ramp = style === 'ascii' ? '.:-=+*#%@' : '░▒▓█';
+    // Figure spaces have digit width and resist ordinary-space compression in chat clients.
+    const blank = style === 'blocks' ? '\u2007' : ' ';
     for (let y = 0; y < height; y++) {
       let line = '';
       for (let x = 0; x < width; x++) {
         const value = sample(pixels, width, height, x, y);
-        line += value === null ? ' ' : ramp[Math.min(ramp.length - 1, Math.floor(value * ramp.length))];
+        line += value === null ? blank : ramp[Math.min(ramp.length - 1, Math.floor(value * ramp.length))];
       }
       lines.push(line);
     }
   }
   // Keep interior and leading spaces, including full row widths.
-  return lines.join('\n');
+  const text = lines.join('\n');
+  // A zero-width word joiner protects the first row from leading-whitespace trimming.
+  return style === 'blocks' ? '\u2060' + text : text;
 }

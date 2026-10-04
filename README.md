@@ -9,6 +9,8 @@ Copy pauses animation and copies the exact displayed frame as plain text. If cli
 ## Telegram
 
 Paste the fox into Telegram. Select the pasted text and apply Monospace formatting before sending. If lines wrap, use Small. Blocks and Braille can differ between desktop and Android because Telegram controls the fonts. No Premium features are required by Copy-fox.
+Blocks use Unicode figure spaces (U+2007) for blank cells instead of ordinary spaces. This preserves digit-width spacing and prevents ordinary-space compression. Monospace formatting is still necessary for a uniform grid.
+A zero-width word joiner (U+2060) at the start of Blocks output protects the first row from leading-whitespace trimming. It occupies no visible column. ASCII output uses ordinary spaces and has no invisible prefix.
 
 ## Controls
 
@@ -47,6 +49,7 @@ No user model imports, accounts, saved settings, or lighting and contrast contro
 ## Hosting
 
 The Sites identity and static output directory are in `.openai/hosting.json`. Credentials are never stored in source. Public source: [Glitch-Cloud-Code/Copy-fox](https://github.com/Glitch-Cloud-Code/Copy-fox).
+Hosted toy: [Copy-fox](https://copy-fox.damnredcloud.chatgpt.site). The hosted Site is owner-private by default. Its access settings are separate from the public GitHub repository.
 
 ## Licenses
 

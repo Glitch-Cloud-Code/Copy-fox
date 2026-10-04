@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import { getDimensions, pixelsToText, STYLES } from '../dist/js/text-art.js';
 
 test('Transparent backgrounds stay blank in all three styles', () => {
-  for (const style of STYLES) assert.equal(pixelsToText(new Uint8Array(32), 2, 4, style).trim(), '');
+  for (const style of STYLES) assert.equal(pixelsToText(new Uint8Array(32), 2, 4, style).replaceAll('\u2060', '').trim(), '');
 });
 test('ASCII preserves vertical orientation, dark silhouettes, and luminance', () => {
   const pixels = new Uint8Array([0, 0, 0, 255, 255, 255, 255, 255]);
   assert.equal(pixelsToText(pixels, 1, 2, 'ascii'), '@\n.');
-  assert.equal(pixelsToText(pixels, 1, 2, 'blocks'), '█\n░');
+  assert.equal(pixelsToText(pixels, 1, 2, 'blocks'), '\u2060█\n░');
 });
 test('All eight Braille dots occupy the correct character positions', () => {
   const dots = [[0, 0, 1], [0, 1, 2], [0, 2, 4], [1, 0, 8], [1, 1, 16], [1, 2, 32], [0, 3, 64], [1, 3, 128]];
@@ -23,7 +23,7 @@ test('Presets have consistent character dimensions and stay below our 4000-chara
     for (const style of STYLES) {
       const { width, height, columns, rows } = getDimensions(style, preset);
       const text = pixelsToText(new Uint8Array(width * height * 4).fill(255), width, height, style);
-      const lines = text.split('\n');
+      const lines = text.replaceAll('\u2060', '').split('\n');
       assert.equal(lines.length, rows);
       assert.ok(lines.every(line => line.length === columns));
       assert.ok(text.length < 4000);
@@ -33,4 +33,13 @@ test('Presets have consistent character dimensions and stay below our 4000-chara
 test('Invalid dimensions and modes fail explicitly', () => {
   assert.throws(() => getDimensions('unknown', 'small'), RangeError);
   assert.throws(() => pixelsToText(new Uint8Array(4), 1, 1, 'braille'), RangeError);
+});
+test('Blocks preserve leading, interior, and trailing blank cells with figure spaces', () => {
+  const pixels = new Uint8Array(5 * 4);
+  pixels.fill(255, 4, 8);
+  pixels.fill(255, 12, 16);
+  const blocks = pixelsToText(pixels, 5, 1, 'blocks');
+  assert.equal(blocks, '\u2060\u2007█\u2007█\u2007');
+  assert.equal(blocks.trimStart(), blocks, 'Leading-space trimming must not shift the first row');
+  assert.equal(pixelsToText(pixels, 5, 1, 'ascii'), ' @ @ ');
 });

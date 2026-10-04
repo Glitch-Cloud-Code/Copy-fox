@@ -14,4 +14,4 @@ Download URLs, SHA-256 hashes, sizes, and animation names are recorded in `docs/
 
 Three.js 0.186.1 is distributed under the MIT license. The license is retained in `dist/vendor/LICENSE`. Run `npm run vendor` to refresh the exact files from the pinned dependency.
 
-DejaVu Sans Mono 2.37 is distributed under the Bitstream Vera/DejaVu/Arev font terms. The complete license is retained in `dist/assets/fonts/LICENSE.txt`. The unchanged font is from the [official release](https://github.com/dejavu-fonts/dejavu-fonts/releases/tag/version_2_37). It includes consistent-width Braille glyphs for the app preview. Telegram supplies its own fonts.
+DejaVu Sans Mono 2.37 is distributed under the Bitstream Vera/DejaVu/Arev font terms. The complete license is retained in `dist/assets/fonts/LICENSE.txt`. The unchanged font is from the [official release](https://github.com/dejavu-fonts/dejavu-fonts/releases/tag/version_2_37). The browser can use fallback glyphs for Braille. Telegram supplies its own fonts.

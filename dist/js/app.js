@@ -45,6 +45,7 @@ function paint(now) {
   }
   lastFrame = now;
   art.textContent = scene.render(style, preset);
+  copyButton.disabled = false;
   const { columns, rows } = getDimensions(style, preset);
   $('#dimensions').textContent = `${columns} × ${rows}`;
   $('#character-count').textContent = `${art.textContent.length.toLocaleString()} CHARACTERS`;
@@ -92,14 +93,13 @@ async function loadSelected() {
     ready = true;
     message.hidden = true;
     viewport.setAttribute('aria-busy', 'false');
-    copyButton.disabled = false;
     $('#copy-status').textContent = 'A fox-shaped message, ready to send.';
     fitArt();
     requestPaint();
   } catch (error) {
     if (sequence !== loadSequence) return;
     console.error('Fox loading failed:', error);
-    message.textContent = 'This fox could not load. Choose another fox, or select this one again to retry.';
+    message.textContent = 'This fox could not load. Choose another fox or reload the page to retry.';
     viewport.setAttribute('aria-busy', 'false');
     $('#render-state').textContent = 'LOAD FAILED';
   }

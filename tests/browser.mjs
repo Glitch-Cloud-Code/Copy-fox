@@ -66,7 +66,22 @@ try {
     const result = await text();
     assert.ok(result.replace(/\s/g, '').length > 30);
     if (style === 'ascii') assert.match(result, /^[ .:\-=+*#%@\n]+$/);
-    if (style === 'blocks') assert.match(result, /^[ ░▒▓█\n]+$/);
+    if (style === 'blocks') {
+      assert.match(result, /^\u2060[\u2007░▒▓█\n]+$/);
+      const widths = await page.evaluate(() => {
+        const context = document.createElement('canvas').getContext('2d');
+        context.font = '20px "DejaVu Mono"';
+        return [context.measureText('\u2007').width, context.measureText('█').width, context.measureText('\u2060').width];
+      });
+      assert.ok(Math.abs(widths[0] - widths[1]) < 0.01, 'Blocks and blank cells have matching preview widths');
+      assert.equal(widths[2], 0, 'The indentation guard occupies no visible column');
+      await page.locator('#copy').click();
+      await page.waitForFunction(() => document.querySelector('#copy-status').textContent.startsWith('Copied.'));
+      const pasted = await page.evaluate(() => navigator.clipboard.readText());
+      assert.equal(pasted.replaceAll('\r\n', '\n'), result, 'Clipboard preserves every block-space cell');
+      assert.ok(pasted.includes('\u2007') && !pasted.includes(' '));
+      assert.equal(pasted.trimStart(), pasted, 'Trimming leading whitespace preserves the first row');
+    }
     if (style === 'braille') assert.match(result, /^[ \u2800-\u28ff\n]+$/);
     await page.screenshot({ path: `test-results/style-${style}.png`, fullPage: true });
   }
