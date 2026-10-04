@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11100d">
+  <meta name="description" content="Turn a fox into text. Rotate, zoom, choose ASCII, blocks, or Braille, and copy a frame into Telegram.">
+  <title>Copy-fox — Foxes, in characters.</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body data-palette="amber">
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Copy-fox home"><span class="prompt">&gt;_</span> COPY-FOX<span class="cursor" aria-hidden="true">▌</span></a>
+    <span class="header-note">A LITTLE FOX. A LOT OF CHARACTERS.</span>
+  </header>
+  <main>
+    <div class="workspace-heading"><h1>Make yourself a fox.</h1><span class="edition">TEXT STUDIO / 01</span></div>
+    <div class="workspace">
+      <section class="terminal" aria-label="Fox preview">
+        <div class="terminal-bar"><span id="file-name">fox://woodland</span><span id="render-state">LOADING</span></div>
+        <div id="viewport" class="viewport" tabindex="0" role="group" aria-label="Interactive fox preview. Drag to rotate, pinch or scroll to zoom. Arrow keys rotate, plus and minus zoom, Home resets." aria-busy="true">
+          <pre id="art" aria-hidden="true"></pre>
+          <p id="preview-message" class="preview-message" role="status">Waking up your fox…</p>
+          <span class="corner top-left" aria-hidden="true"></span><span class="corner bottom-right" aria-hidden="true"></span>
+        </div>
+        <div class="terminal-footer"><span id="dimensions">48 × 24</span><span id="character-count">0 CHARACTERS</span><span>MONOCHROME</span></div>
+        <div class="preview-help"><span>DRAG TO ROTATE</span><span>SCROLL OR PINCH TO ZOOM</span></div>
+      </section>
+
+      <aside class="controls" aria-label="Fox controls">
+        <div class="control-section">
+          <label class="section-label" for="model"><span>01</span> CHOOSE YOUR FOX</label>
+          <select id="model" disabled><option>Loading foxes…</option></select>
+          <p id="model-description" class="model-description">Five foxes, different personalities.</p>
+        </div>
+        <fieldset class="control-section"><legend class="section-label"><span>02</span> TEXT STYLE</legend>
+          <div class="choices style-choices">
+            <label><input type="radio" name="style" value="ascii" checked><span><b aria-hidden="true">@#:</b>ASCII</span></label>
+            <label><input type="radio" name="style" value="blocks"><span><b aria-hidden="true">▓▒░</b>Blocks</span></label>
+            <label><input type="radio" name="style" value="braille"><span><b aria-hidden="true">⠿⠶⠄</b>Braille</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="control-section"><legend class="section-label"><span>03</span> OUTPUT SIZE</legend>
+          <div class="choices size-choices">
+            <label><input type="radio" name="size" value="small"><span>Small<small>32 cols</small></span></label>
+            <label><input type="radio" name="size" value="medium" checked><span>Medium<small>48 cols</small></span></label>
+            <label><input type="radio" name="size" value="large"><span>Large<small>64 cols</small></span></label>
+          </div>
+        </fieldset>
+        <fieldset class="control-section"><legend class="section-label"><span>04</span> TERMINAL PALETTE</legend>
+          <div class="choices palette-choices">
+            <label><input type="radio" name="palette" value="amber" checked><span><i class="swatch amber" aria-hidden="true"></i>Amber</span></label>
+            <label><input type="radio" name="palette" value="green"><span><i class="swatch green" aria-hidden="true"></i>Green</span></label>
+            <label><input type="radio" name="palette" value="ice"><span><i class="swatch ice" aria-hidden="true"></i>Ice</span></label>
+          </div>
+          <p class="fine-print">For your screen. Copied text has no color.</p>
+        </fieldset>
+        <fieldset id="camera-controls" class="control-section" disabled><legend class="section-label"><span>05</span> CAMERA</legend>
+          <div class="rotation-buttons" aria-label="Rotation controls">
+            <button type="button" data-rotate="left" aria-label="Rotate left">Left</button><button type="button" data-rotate="right" aria-label="Rotate right">Right</button><button type="button" data-rotate="up" aria-label="Rotate up">Up</button><button type="button" data-rotate="down" aria-label="Rotate down">Down</button>
+          </div>
+          <div class="zoom-label"><label for="zoom">Zoom</label><output id="zoom-value" for="zoom">100%</output></div>
+          <input id="zoom" type="range" min="50" max="250" step="5" value="100">
+          <div class="camera-actions"><button id="reset" type="button">Reset view</button><button id="play" type="button" disabled aria-pressed="false">Play</button></div>
+          <div id="animation-control" hidden><label for="animation">Animation</label><select id="animation"></select></div>
+          <p id="animation-note" class="fine-print">This fox holds its pose.</p>
+        </fieldset>
+        <button id="copy" class="copy-button" type="button" disabled>Copy fox <span aria-hidden="true">[ CTRL C ]</span></button>
+        <p id="copy-status" class="copy-status" role="status">A fox-shaped message, ready to send.</p>
+      </aside>
+    </div>
+
+    <details id="copy-fallback" class="fallback" hidden><summary>Select your fox text</summary><label for="copy-text">Copy this text manually</label><textarea id="copy-text" readonly spellcheck="false"></textarea></details>
+    <div class="below-workspace">
+      <section class="telegram-help" aria-labelledby="telegram-title"><h2 id="telegram-title">SEND A FOX TO TELEGRAM</h2><p>Copy your fox. Paste it into Telegram, select the text, and apply <strong>Monospace</strong> formatting before sending. If lines wrap, try Small. Blocks and Braille may look different between devices.</p></section>
+      <details class="credits"><summary>Meet the fox makers <span aria-hidden="true">[ + ]</span></summary><div id="credits-list"></div><p class="fine-print">Models are displayed at a normalized scale and converted to monochrome text. Original model files are unchanged.</p></details>
+    </div>
+  </main>
+  <footer class="page-footer"><span>COPY-FOX / MADE FOR FOX PEOPLE</span><a id="source-link" href="https://github.com/Glitch-Cloud-Code/Copy-fox">Source on GitHub</a><span>NO ACCOUNT. JUST FOXES.</span></footer>
+  <noscript>This fox toy needs JavaScript. Enable JavaScript to rotate models and generate text.</noscript>
+</body>
+</html>
