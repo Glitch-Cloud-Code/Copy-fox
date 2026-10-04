@@ -48,8 +48,11 @@ No user model imports, accounts, saved settings, or lighting and contrast contro
 
 ## Hosting
 
-The Sites identity and static output directory are in `.openai/hosting.json`. Credentials are never stored in source. Public source: [Glitch-Cloud-Code/Copy-fox](https://github.com/Glitch-Cloud-Code/Copy-fox).
-Hosted toy: [Copy-fox](https://copy-fox.damnredcloud.chatgpt.site). The hosted Site is owner-private by default. Its access settings are separate from the public GitHub repository.
+Hosted toy: [Copy-fox](https://copy-fox.pages.dev). Cloudflare Pages serves the static `dist` directory through a Direct Upload project named `copy-fox`. Public source: [Glitch-Cloud-Code/Copy-fox](https://github.com/Glitch-Cloud-Code/Copy-fox).
+
+To publish an update, open Cloudflare **Workers & Pages → copy-fox**. Choose **Create deployment** from the project's **More actions** menu. Upload the contents of `dist`, or a ZIP with `index.html` at its root, and select the production environment. GitHub pushes do not deploy automatically.
+
+The previous Sites deployment remains available at [the original address](https://copy-fox.damnredcloud.chatgpt.site). Its identity is retained in `.openai/hosting.json`. Credentials are never stored in source.
 
 ## Licenses
 

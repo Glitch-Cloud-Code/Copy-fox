@@ -34,6 +34,12 @@ Public repository verified at https://github.com/Glitch-Cloud-Code/Copy-fox. The
 
 On Windows, the Sites packaging helper uses Git Bash and `TAR_OPTIONS=--force-local` to avoid WSL and drive-letter archive-path errors. This is a local packaging adjustment, not an application dependency.
 
+## Cloudflare hosting
+
+Cloudflare Pages Direct Upload succeeded at https://copy-fox.pages.dev. All 20 deployed files return HTTP 200 and match the local SHA-256 hashes. The live browser renders the fox. Rotation changes the frame, Reset works, and Blocks retains its U+2060 prefix. Static checks pass. All four review roles ACCEPT the hosting change. Asset comparison and the live screenshot are in ignored `test-results/`.
+
+GitHub remains the public source repository. Updates require another Cloudflare upload. The previous Sites deployment remains available.
+
 ## Residual validation
 
 An actual Android device and Telegram desktop/Android paste were not available in this session. Browser touch emulation and plain-text clipboard checks establish app behavior. Telegram controls monospace formatting, glyph metrics, and line wrapping. Test a real message with each style before assuming identical presentation on both clients.
